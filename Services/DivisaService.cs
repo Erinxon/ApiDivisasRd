@@ -30,7 +30,7 @@ namespace ApiDivisas.Services
                 Venta = infoDolar[(int)OperacionMoneda.Venta].InnerText 
             };       
             var euro = new Euro { 
-                Compra = infoEuro[(int)OperacionMoneda.Venta].InnerText, 
+                Compra = infoEuro[(int)OperacionMoneda.Compra].InnerText, 
                 Venta = infoEuro[(int)OperacionMoneda.Venta].InnerText 
             };
             var divisa = new Divisa  { Dolar = dolar, Euro = euro };
