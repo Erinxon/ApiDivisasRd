@@ -21,6 +21,7 @@ namespace ApiDivisas.Controllers
             this._divisaService = divisaService;
         }
         [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 5)]
         public async Task<ActionResult<ApiResponse<Divisa>>> Get()
         {
             var response = new ApiResponse<Divisa>();

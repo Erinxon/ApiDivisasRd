@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ApiDivisas.Models
 {
-    public class Euro : Moneda
+    public class Euro : MonedaBase
     {
 
     }

@@ -39,6 +39,7 @@ namespace ApiDivisas
 
             var sectionUrl = Configuration.GetSection("SectionUrlPage");
             services.Configure<SectionUrlPage>(sectionUrl);
+            services.AddResponseCaching();
 
         }
 
@@ -55,8 +56,10 @@ namespace ApiDivisas
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
             app.UseAuthorization();
+
+            app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {
