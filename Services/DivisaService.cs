@@ -20,18 +20,18 @@ namespace ApiDivisas.Services
         public async Task<Divisa> GetDivisaAsync()
         {
             var htmlDoc = await GetHtmlDocument();
-            var infoDolar = htmlDoc.DocumentNode
+            var compra = htmlDoc.DocumentNode
                 .SelectNodes(@"//div[@class='compra']/p[@class='font-700']");
-            var infoEuro = htmlDoc.DocumentNode
+            var venta = htmlDoc.DocumentNode
                 .SelectNodes(@"//div[@class='venta']/div/p");
             
             var dolar = new Dolar { 
-                Compra = infoDolar[(int)OperacionMoneda.Compra].InnerText,
-                Venta = infoDolar[(int)OperacionMoneda.Venta].InnerText 
+                Compra = compra[(int)OperacionMoneda.Dolar].InnerText,
+                Venta = venta[(int)OperacionMoneda.Dolar].InnerText 
             };       
             var euro = new Euro { 
-                Compra = infoEuro[(int)OperacionMoneda.Compra].InnerText, 
-                Venta = infoEuro[(int)OperacionMoneda.Venta].InnerText 
+                Compra = compra[(int)OperacionMoneda.Euro].InnerText, 
+                Venta = venta[(int)OperacionMoneda.Euro].InnerText 
             };
             var divisa = new Divisa  { Dolar = dolar, Euro = euro };
 
@@ -48,6 +48,6 @@ namespace ApiDivisas.Services
 
     public enum OperacionMoneda
     {
-        Compra, Venta
+        Dolar, Euro
     }
 }
