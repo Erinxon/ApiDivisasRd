@@ -26,12 +26,12 @@ namespace ApiDivisas.Services
                 .SelectNodes(@"//div[@class='venta']/div/p");
             
             var dolar = new Dolar { 
-                Compra = compra[(int)OperacionMoneda.Dolar].InnerText,
-                Venta = venta[(int)OperacionMoneda.Dolar].InnerText 
+                Compra = compra[(int)TipoMoneda.Dolar].InnerText,
+                Venta = venta[(int)TipoMoneda.Dolar].InnerText 
             };       
             var euro = new Euro { 
-                Compra = compra[(int)OperacionMoneda.Euro].InnerText, 
-                Venta = venta[(int)OperacionMoneda.Euro].InnerText 
+                Compra = compra[(int)TipoMoneda.Euro].InnerText, 
+                Venta = venta[(int)TipoMoneda.Euro].InnerText 
             };
             var divisa = new Divisa  { Dolar = dolar, Euro = euro };
 
@@ -46,7 +46,7 @@ namespace ApiDivisas.Services
         }
     }
 
-    public enum OperacionMoneda
+    public enum TipoMoneda
     {
         Dolar, Euro
     }
