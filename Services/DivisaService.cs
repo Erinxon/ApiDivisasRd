@@ -1,53 +1,53 @@
 ﻿using ApiDivisas.Models;
-using ApiDivisas.Response;
+using ApiDivisas.Handles;
+using ApiDivisas.AppsettingModels;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiDivisas.Response;
 
 namespace ApiDivisas.Services
 {
     public class DivisaService : IDivisaService
     {
-        private readonly SectionUrlPage _sectionUrlPage;
-
-        public DivisaService(IOptions<SectionUrlPage> sectionUrlPage)
+        private readonly SectionUrlPage urlPage;
+        private readonly XPath _xPaths;
+        public DivisaService(IOptions<SectionUrlPage> sectionUrlPage, IOptions<XPath> xPaths)
         {
-            this._sectionUrlPage = sectionUrlPage.Value;
+            this.urlPage = sectionUrlPage.Value;
+            this._xPaths = xPaths.Value;
         }
-        public async Task<Divisa> GetDivisaAsync()
+        public async Task<ApiResponse<Divisa>> GetDivisaAsync()
         {
-            var htmlDoc = await GetHtmlDocument();
-            var compra = htmlDoc.DocumentNode
-                .SelectNodes(@"//div[@class='compra']/p[@class='font-700']");
-            var venta = htmlDoc.DocumentNode
-                .SelectNodes(@"//div[@class='venta']/div/p");
-            
-            var dolar = new Dolar { 
-                Compra = compra[(int)TipoMoneda.Dolar].InnerText,
-                Venta = venta[(int)TipoMoneda.Dolar].InnerText 
-            };       
-            var euro = new Euro { 
-                Compra = compra[(int)TipoMoneda.Euro].InnerText, 
-                Venta = venta[(int)TipoMoneda.Euro].InnerText 
-            };
-            var divisa = new Divisa  { Dolar = dolar, Euro = euro };
+            var response = new ApiResponse<Divisa>();        
+            try
+            {
+                var htmlDoc = await GetHtmlDocument(); 
+                var divisasNodes = htmlDoc.DocumentNode.SelectNodes(_xPaths.XPathGeneral);
+                response.Data = new Divisa
+                {
+                    Dolar = divisasNodes.GetMonedaDolar(_xPaths),
+                    Euro = divisasNodes.GetMonedaEuro(_xPaths)
+                };
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.message = ex.Message;
+            }
 
-            return divisa;
+            return response;
         }
 
         private async Task<HtmlDocument> GetHtmlDocument()
         {
             HtmlWeb htmlWeb = new();
-            HtmlDocument htmlDoc = await htmlWeb.LoadFromWebAsync(this._sectionUrlPage.Url);
+            HtmlDocument htmlDoc = await htmlWeb.LoadFromWebAsync(this.urlPage.Url);
             return htmlDoc;
         }
     }
 
-    public enum TipoMoneda
-    {
-        Dolar, Euro
-    }
 }

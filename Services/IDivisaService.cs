@@ -1,4 +1,5 @@
 ﻿using ApiDivisas.Models;
+using ApiDivisas.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace ApiDivisas.Services
 {
     public interface IDivisaService
     {
-        Task<Divisa> GetDivisaAsync();
+        Task<ApiResponse<Divisa>> GetDivisaAsync();
     }
 }

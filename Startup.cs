@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApiDivisas.Response;
+using ApiDivisas.AppsettingModels;
 using ApiDivisas.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,11 +38,10 @@ namespace ApiDivisas
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiDivisas", Version = "v1" });
             });
+
             services.AddScoped<IDivisaService, DivisaService>();
-
-
-            var sectionUrl = Configuration.GetSection("SectionUrlPage");
-            services.Configure<SectionUrlPage>(sectionUrl);
+            services.Configure<SectionUrlPage>(Configuration.GetSection("SectionUrlPage"));
+            services.Configure<XPath>(Configuration.GetSection("XPath"));
             services.AddResponseCaching();
 
         }

@@ -9,5 +9,6 @@ namespace ApiDivisas.Models
     {
         public string Compra { get; set; }
         public string Venta { get; set; }
+        public string UltimaActualizacion { get; set; }
     }
 }

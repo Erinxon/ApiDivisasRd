@@ -12,6 +12,7 @@ namespace ApiDivisas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 5)]
     public class DivisasController : ControllerBase
     {
         private readonly IDivisaService _divisaService;
@@ -22,21 +23,12 @@ namespace ApiDivisas.Controllers
         }
 
         [HttpGet]
-        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 5)]
         public async Task<ActionResult<ApiResponse<Divisa>>> Get()
         {
-            var response = new ApiResponse<Divisa>();
-            try
-            {
-                response.Data = await _divisaService.GetDivisaAsync();
-            }
-            catch (Exception ex)
-            {
-
-                response.Success = false;
-                response.message = ex.Message;
-            }
-            return Ok(response);
+            var response = await _divisaService.GetDivisaAsync();
+            return response.Data == null ||
+                !response.Success ? BadRequest(response) :
+                Ok(response);
         }
     }
 }

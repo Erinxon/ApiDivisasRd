@@ -9,5 +9,6 @@ namespace ApiDivisas.Models
     {
         public Dolar Dolar { get; set; }
         public Euro Euro { get; set; }
+       
     }
 }
